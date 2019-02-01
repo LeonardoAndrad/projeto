@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, IonicPage, ToastController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { MenuController } from 'ionic-angular/components/app/menu-controller';
 @IonicPage()
 @Component({
   selector: 'page-home',
@@ -14,7 +15,8 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
     public toastCtrl: ToastController,
-    public firebaseauth: AngularFireAuth) {
+    public firebaseauth: AngularFireAuth,
+    public manu: MenuController,) {
 
   }
 
