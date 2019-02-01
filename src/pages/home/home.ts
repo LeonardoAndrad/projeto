@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
-
+import { Component, ViewChild } from '@angular/core';
+import { NavController, IonicPage, ToastController } from 'ionic-angular';
+import { AngularFireAuth } from 'angularfire2/auth';
 @IonicPage()
 @Component({
   selector: 'page-home',
@@ -8,12 +8,41 @@ import { NavController, IonicPage } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  public user: any;
+  @ViewChild('usuario') email;
+  @ViewChild('senha') password;
+
+  constructor(public navCtrl: NavController,
+    public toastCtrl: ToastController,
+    public firebaseauth: AngularFireAuth) {
 
   }
 
-  login(){
-    this.navCtrl.setRoot('CategoriasPage');
+  public login(): void {
+    this.firebaseauth.auth.signInWithEmailAndPassword(this.email.value, this.password.value)
+      .then(() => {
+        this.exibirToast('Login efetuado com sucesso');
+      })
+      .catch((erro: any) => {
+        this.exibirToast(erro);
+      });
+  }
+
+  public cadastrarUsuario(): void {
+    this.firebaseauth.auth.createUserWithEmailAndPassword(this.email.value, this.password.value)
+      .then(() => {
+        this.exibirToast('Usuário criado com sucesso');
+        this.user = this.firebaseauth.auth.currentUser
+      })
+      .catch((erro: any) => {
+        this.exibirToast(erro);
+      });
+  }
+
+  private exibirToast(mensagem: string): void {
+    let toast = this.toastCtrl.create({ duration: 4000, position: 'botton' });
+    toast.setMessage(mensagem);
+    toast.present();
   }
 
 
